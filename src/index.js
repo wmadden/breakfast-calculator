@@ -7,9 +7,11 @@ const desiredProtein = 100;
 const desiredCarbohydrates = 100;
 const desiredFat = 100;
 
+const desiredFoods = ['eggs', 'protein powder', 'oats', 'vanilla soy yoghurt', 'banana'];
+
 getFoodData().then((foodData) => {
-  const availableFoods = foodData.slice(0, 4);
-  const { foodVariables, equations } = Solver({
+  const availableFoods = foodData.filter(food => desiredFoods.includes(food.name));
+  const { foodVariables } = Solver({
     availableFoods,
     desiredProtein,
     desiredCarbohydrates,
@@ -41,6 +43,7 @@ getFoodData().then((foodData) => {
     console.log(`${name}: ${amount.toFixed(0)}g (${amountProtein.toFixed(1)}, ${amountCarbohydrates.toFixed(1)}, ${amountFat.toFixed(1)})`);
   });
 
+  console.log('');
   console.log('Total:');
   console.log('  Protein:      ', totals[PROTEIN].toFixed(1));
   console.log('  Carbohydrates:', totals[CARBOHYDRATES].toFixed(1));
