@@ -22,8 +22,7 @@ function getFoodVariable(foodDescriptor) {
     foodDescriptor,
     variable,
     constraints: [
-      // REQUIRED
-      new Inequality(new Expression(variable), GEQ, new Expression(0)),
+      new Inequality(new Expression(variable), GEQ, new Expression(0), Strength.required),
     ],
     expressions: {
       [PROTEIN]: proteinExpression,
@@ -58,18 +57,12 @@ function Solver({ availableFoods, desiredProtein, desiredCarbohydrates, desiredF
   const carbohydratesSumEquation = new Equation(sumOfCarbohydrates, desiredCarbohydrates, Strength.strong);
   const fatSumEquation = new Equation(sumOfFat, desiredFat, Strength.strong);
 
-  // STRONG
   solver.addConstraint(proteinSumEquation);
   solver.addConstraint(carbohydratesSumEquation);
   solver.addConstraint(fatSumEquation);
 
   return {
     foodVariables,
-    equations: {
-      protein: proteinSumEquation,
-      carbohydrates: carbohydratesSumEquation,
-      fat: fatSumEquation,
-    },
     solver,
   };
 }

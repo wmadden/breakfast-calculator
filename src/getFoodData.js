@@ -26,10 +26,6 @@ function getFoodData() {
           [FAT]: parseFloat(food[FAT], 10) / 100.0,
         });
       });
-    })
-    .then((data) => {
-      console.log(data);
-      return data;
     });
 }
 
