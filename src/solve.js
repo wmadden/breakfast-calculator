@@ -1,5 +1,4 @@
 const Cassowary = require('./c');
-const { PROTEIN, CARBOHYDRATES, FAT } = require('./constants');
 
 const {
   Variable,
@@ -41,7 +40,6 @@ function sumExpression(foodVariables, nutrientName) {
 
 function solve({ availableFoods, nutrientGoals }) {
   const foodVariables = availableFoods.map(getFoodVariable);
-  const { protein: desiredProtein, carbohydrates: desiredCarbohydrates, fat: desiredFat } = nutrientGoals;
 
   const solver = new SimplexSolver();
 
@@ -49,17 +47,12 @@ function solve({ availableFoods, nutrientGoals }) {
     foodVariable.constraints.forEach(constraint => solver.addConstraint(constraint));
   });
 
-  const sumOfProtein = sumExpression(foodVariables, PROTEIN);
-  const sumOfCarbohydrates = sumExpression(foodVariables, CARBOHYDRATES);
-  const sumOfFat = sumExpression(foodVariables, FAT);
-
-  const proteinSumEquation = new Equation(sumOfProtein, desiredProtein, Strength.strong);
-  const carbohydratesSumEquation = new Equation(sumOfCarbohydrates, desiredCarbohydrates, Strength.strong);
-  const fatSumEquation = new Equation(sumOfFat, desiredFat, Strength.strong);
-
-  solver.addConstraint(proteinSumEquation);
-  solver.addConstraint(carbohydratesSumEquation);
-  solver.addConstraint(fatSumEquation);
+  Object.keys(nutrientGoals).forEach((nutrientName) => {
+    const nutrientTargetSum = nutrientGoals[nutrientName];
+    const nutrientSumExpression = sumExpression(foodVariables, nutrientName);
+    const nutrientSumEquation = new Equation(nutrientSumExpression, nutrientTargetSum, Strength.strong);
+    solver.addConstraint(nutrientSumEquation);
+  });
 
   const ingredients = foodVariables.map(({ variable, foodDescriptor }) => {
     const { nutrients } = foodDescriptor;
