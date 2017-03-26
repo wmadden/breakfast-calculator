@@ -12,7 +12,7 @@ const {
 } = Cassowary;
 
 function getFoodVariable(foodDescriptor) {
-  const { name, protein, carbohydrates, fat } = foodDescriptor;
+  const { name, nutrients: { protein, carbohydrates, fat } } = foodDescriptor;
   const variable = new Variable({ name });
   const proteinExpression = new Expression(protein).times(new Expression(variable));
   const carbohydratesExpression = new Expression(carbohydrates).times(new Expression(variable));

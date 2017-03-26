@@ -1,6 +1,5 @@
 const fs = require('fs');
 const parse = require('csv-parse');
-const { PROTEIN, CARBOHYDRATES, FAT } = require('./constants');
 
 function loadCSV(filepath, parserOptions = {}) {
   return new Promise((success) => {
@@ -20,11 +19,16 @@ function getFoodData() {
   return loadCSV('./src/foods.csv', { columns: true })
     .then((data) => {
       return data.map((food) => {
-        return Object.assign({}, food, {
-          [PROTEIN]: parseFloat(food[PROTEIN], 10) / 100.0,
-          [CARBOHYDRATES]: parseFloat(food[CARBOHYDRATES], 10) / 100.0,
-          [FAT]: parseFloat(food[FAT], 10) / 100.0,
+        const nutrients = {};
+
+        Object.keys(food).forEach((nutrient) => {
+          nutrients[nutrient] = parseFloat(food[nutrient]) / 100.0;
         });
+
+        return {
+          name: food.name,
+          nutrients,
+        };
       });
     });
 }

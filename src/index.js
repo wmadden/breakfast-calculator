@@ -19,7 +19,7 @@ function generateMealPlan({ availableFoods, desiredNutrients }) {
   const ingredients = [];
 
   foodVariables.forEach(({ foodDescriptor, variable }) => {
-    const { name, protein, carbohydrates, fat } = foodDescriptor;
+    const { name, nutrients: { protein, carbohydrates, fat } } = foodDescriptor;
     const amount = variable.value;
 
     const amountProtein = amount * protein;
