@@ -22,6 +22,7 @@ function getFoodData() {
         const nutrients = {};
 
         Object.keys(food).forEach((nutrient) => {
+          if (nutrient === 'name') return;
           nutrients[nutrient] = parseFloat(food[nutrient]) / 100.0;
         });
 
