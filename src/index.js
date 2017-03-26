@@ -37,9 +37,9 @@ function main() {
     const { ingredients, totals } = generateMealPlan({
       availableFoods,
       nutrientGoals: {
-        desiredProtein,
-        desiredCarbohydrates,
-        desiredFat,
+        protein: desiredProtein,
+        carbohydrates: desiredCarbohydrates,
+        fat: desiredFat,
       },
     });
 
