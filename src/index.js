@@ -18,16 +18,13 @@ function generateMealPlan({ availableFoods, desiredNutrients }) {
   const totals = {};
   const ingredients = [];
 
-  foodVariables.forEach(({ foodDescriptor, variable }) => {
+  foodVariables.forEach(({ foodDescriptor, amount, nutrientAmounts }) => {
     const { name, nutrients } = foodDescriptor;
-    const amount = variable.value;
 
-    const nutrientAmounts = {};
     Object.keys(nutrients).forEach((nutrientName) => {
       const nutrientValue = foodDescriptor.nutrients[nutrientName];
       const nutrientAmount = amount * nutrientValue;
 
-      nutrientAmounts[nutrientName] = nutrientAmount;
       if (!totals.hasOwnProperty(nutrientName)) totals[nutrientName] = 0;
       totals[nutrientName] += nutrientAmount;
     });

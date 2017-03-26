@@ -61,9 +61,26 @@ function solve({ availableFoods, desiredProtein, desiredCarbohydrates, desiredFa
   solver.addConstraint(carbohydratesSumEquation);
   solver.addConstraint(fatSumEquation);
 
+  const ingredients = foodVariables.map(({ variable, foodDescriptor }) => {
+    const { nutrients } = foodDescriptor;
+    const amount = variable.value;
+
+    const nutrientAmounts = {};
+    Object.keys(nutrients).forEach((nutrientName) => {
+      const nutrientValue = nutrients[nutrientName];
+      const nutrientAmount = amount * nutrientValue;
+      nutrientAmounts[nutrientName] = nutrientAmount;
+    });
+
+    return {
+      foodDescriptor,
+      amount,
+      nutrientAmounts,
+    };
+  });
+
   return {
-    foodVariables,
-    solver,
+    foodVariables: ingredients,
   };
 }
 
