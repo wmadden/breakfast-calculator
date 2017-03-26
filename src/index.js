@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 const { getFoodData } = require('./getFoodData');
 const { solve } = require('./solve');
-const { PROTEIN, CARBOHYDRATES, FAT } = require('./constants');
 
 function generateMealPlan({ availableFoods, nutrientGoals }) {
   const { ingredients } = solve({
@@ -57,9 +56,9 @@ function main() {
 
     console.log('');
     console.log('Total:');
-    console.log('  Protein:      ', totals[PROTEIN].toFixed(1));
-    console.log('  Carbohydrates:', totals[CARBOHYDRATES].toFixed(1));
-    console.log('  Fat:          ', totals[FAT].toFixed(1));
+    console.log('  Protein:      ', totals.protein.toFixed(1));
+    console.log('  Carbohydrates:', totals.carbohydrates.toFixed(1));
+    console.log('  Fat:          ', totals.fat.toFixed(1));
   });
 }
 
