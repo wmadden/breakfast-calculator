@@ -80,7 +80,7 @@ function solve({ availableFoods, desiredProtein, desiredCarbohydrates, desiredFa
   });
 
   return {
-    foodVariables: ingredients,
+    ingredients,
   };
 }
 

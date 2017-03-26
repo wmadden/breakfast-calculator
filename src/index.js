@@ -8,7 +8,7 @@ function generateMealPlan({ availableFoods, desiredNutrients }) {
     desiredProtein, desiredCarbohydrates, desiredFat,
   } = desiredNutrients;
 
-  const { foodVariables } = solve({
+  const { ingredients } = solve({
     availableFoods,
     desiredProtein,
     desiredCarbohydrates,
@@ -16,22 +16,12 @@ function generateMealPlan({ availableFoods, desiredNutrients }) {
   });
 
   const totals = {};
-  const ingredients = [];
 
-  foodVariables.forEach(({ foodDescriptor, amount, nutrientAmounts }) => {
-    const { name } = foodDescriptor;
-
+  ingredients.forEach(({ nutrientAmounts }) => {
     Object.keys(nutrientAmounts).forEach((nutrientName) => {
       const nutrientAmount = nutrientAmounts[nutrientName];
       if (!totals.hasOwnProperty(nutrientName)) totals[nutrientName] = 0;
       totals[nutrientName] += nutrientAmount;
-    });
-
-    ingredients.push({
-      name,
-      foodDescriptor,
-      amount,
-      nutrientAmounts,
     });
   });
 
@@ -67,8 +57,8 @@ function main() {
     console.log('Meal plan: ingredient amount (g) (protein, carbohydrates, fat)');
     console.log('');
 
-    ingredients.forEach(({ name, amount, nutrientAmounts }) => {
-      console.log(`${name}: ${amount.toFixed(0)}g (${nutrientAmounts.protein.toFixed(1)}, ${nutrientAmounts.carbohydrates.toFixed(1)}, ${nutrientAmounts.fat.toFixed(1)})`);
+    ingredients.forEach(({ foodDescriptor, amount, nutrientAmounts }) => {
+      console.log(`${foodDescriptor.name}: ${amount.toFixed(0)}g (${nutrientAmounts.protein.toFixed(1)}, ${nutrientAmounts.carbohydrates.toFixed(1)}, ${nutrientAmounts.fat.toFixed(1)})`);
     });
 
     console.log('');
