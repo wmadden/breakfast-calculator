@@ -1,0 +1,25 @@
+{
+  "name": "breakfast-calculator",
+  "version": "1.0.0",
+  "description": "Calculates breakfast ingredients satisfying dietary requirements",
+  "main": "index.js",
+  "author": "Will Madden <w.a.madden@gmail.com>",
+  "license": "MIT",
+  "neutrino": {
+    "use": [
+      "neutrino-preset-node"
+    ]
+  },
+  "engines": {
+    "node": "^7.4.0"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb-base": "^11.1.2",
+    "eslint-plugin-import": "^2.2.0",
+    "neutrino": "^5.0.0",
+    "neutrino-preset-node": "^5.0.0"
+  }
+}
