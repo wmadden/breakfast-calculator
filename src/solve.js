@@ -12,23 +12,22 @@ const {
 } = Cassowary;
 
 function getFoodVariable(foodDescriptor) {
-  const { name, nutrients: { protein, carbohydrates, fat } } = foodDescriptor;
-  const variable = new Variable({ name });
-  const proteinExpression = new Expression(protein).times(new Expression(variable));
-  const carbohydratesExpression = new Expression(carbohydrates).times(new Expression(variable));
-  const fatExpression = new Expression(fat).times(new Expression(variable));
+  const { name, nutrients } = foodDescriptor;
+  const ingredientAmountVariable = new Variable({ name });
+
+  const nutrientExpressions = {};
+  Object.keys(nutrients).forEach((nutrientName) => {
+    const nutrientValue = nutrients[nutrientName];
+    nutrientExpressions[nutrientName] = new Expression(ingredientAmountVariable).times(new Expression(nutrientValue));
+  });
 
   return {
     foodDescriptor,
-    variable,
+    variable: ingredientAmountVariable,
     constraints: [
-      new Inequality(new Expression(variable), GEQ, new Expression(0), Strength.required),
+      new Inequality(new Expression(ingredientAmountVariable), GEQ, new Expression(0), Strength.required),
     ],
-    expressions: {
-      [PROTEIN]: proteinExpression,
-      [CARBOHYDRATES]: carbohydratesExpression,
-      [FAT]: fatExpression,
-    },
+    expressions: nutrientExpressions,
   };
 }
 
