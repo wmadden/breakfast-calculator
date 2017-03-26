@@ -3,16 +3,10 @@ const { getFoodData } = require('./getFoodData');
 const { solve } = require('./solve');
 const { PROTEIN, CARBOHYDRATES, FAT } = require('./constants');
 
-function generateMealPlan({ availableFoods, desiredNutrients }) {
-  const {
-    desiredProtein, desiredCarbohydrates, desiredFat,
-  } = desiredNutrients;
-
+function generateMealPlan({ availableFoods, nutrientGoals }) {
   const { ingredients } = solve({
     availableFoods,
-    desiredProtein,
-    desiredCarbohydrates,
-    desiredFat,
+    nutrientGoals,
   });
 
   const totals = {};
@@ -42,7 +36,7 @@ function main() {
     const availableFoods = foodData.filter(food => desiredFoods.includes(food.name));
     const { ingredients, totals } = generateMealPlan({
       availableFoods,
-      desiredNutrients: {
+      nutrientGoals: {
         desiredProtein,
         desiredCarbohydrates,
         desiredFat,
