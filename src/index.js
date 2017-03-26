@@ -2,44 +2,32 @@
 const { getFoodData } = require('./getFoodData');
 const { solve } = require('./solve');
 
-function generateMealPlan({ availableFoods, nutrientGoals }) {
-  const { ingredients } = solve({
-    availableFoods,
-    nutrientGoals,
-  });
-
-  const totals = {};
-
-  ingredients.forEach(({ nutrientAmounts }) => {
-    Object.keys(nutrientAmounts).forEach((nutrientName) => {
-      const nutrientAmount = nutrientAmounts[nutrientName];
-      if (!totals.hasOwnProperty(nutrientName)) totals[nutrientName] = 0;
-      totals[nutrientName] += nutrientAmount;
-    });
-  });
-
-  return {
-    totals,
-    ingredients,
-  };
-}
-
 function main() {
-  const desiredProtein = 100;
-  const desiredCarbohydrates = 100;
-  const desiredFat = 100;
+  const desiredProtein = 66.7;
+  const desiredCarbohydrates = 58.3;
+  const desiredFat = 30.0;
 
   const desiredFoods = ['eggs', 'protein powder', 'oats', 'vanilla soy yoghurt', 'banana'];
 
   getFoodData().then((foodData) => {
     const availableFoods = foodData.filter(food => desiredFoods.includes(food.name));
-    const { ingredients, totals } = generateMealPlan({
+    const { ingredients } = solve({
       availableFoods,
       nutrientGoals: {
         protein: desiredProtein,
         carbohydrates: desiredCarbohydrates,
         fat: desiredFat,
       },
+    });
+
+    const totals = {};
+
+    ingredients.forEach(({ nutrientAmounts }) => {
+      Object.keys(nutrientAmounts).forEach((nutrientName) => {
+        const nutrientAmount = nutrientAmounts[nutrientName];
+        if (!totals.hasOwnProperty(nutrientName)) totals[nutrientName] = 0;
+        totals[nutrientName] += nutrientAmount;
+      });
     });
 
     console.log('');
