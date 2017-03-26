@@ -40,7 +40,7 @@ function sumExpression(foodVariables, nutrientName) {
   return expression;
 }
 
-function Solver({ availableFoods, desiredProtein, desiredCarbohydrates, desiredFat }) {
+function solve({ availableFoods, desiredProtein, desiredCarbohydrates, desiredFat }) {
   const foodVariables = availableFoods.map(getFoodVariable);
 
   const solver = new SimplexSolver();
@@ -68,5 +68,5 @@ function Solver({ availableFoods, desiredProtein, desiredCarbohydrates, desiredF
 }
 
 module.exports = {
-  Solver,
+  solve,
 };

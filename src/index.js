@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const { getFoodData } = require('./getFoodData');
-const { Solver } = require('./Solver');
+const { solve } = require('./solve');
 const { PROTEIN, CARBOHYDRATES, FAT } = require('./constants');
 
 function generateMealPlan({ availableFoods, desiredNutrients }) {
@@ -8,7 +8,7 @@ function generateMealPlan({ availableFoods, desiredNutrients }) {
     desiredProtein, desiredCarbohydrates, desiredFat,
   } = desiredNutrients;
 
-  const { foodVariables } = Solver({
+  const { foodVariables } = solve({
     availableFoods,
     desiredProtein,
     desiredCarbohydrates,
