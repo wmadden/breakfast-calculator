@@ -22,5 +22,8 @@
     "eslint-plugin-import": "^2.2.0",
     "neutrino": "^5.0.0",
     "neutrino-preset-node": "^5.0.0"
+  },
+  "scripts": {
+    "test": "/usr/bin/env node ./src/index.js"
   }
 }
