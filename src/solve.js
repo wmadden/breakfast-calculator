@@ -7,6 +7,7 @@ const {
   Equation,
   Expression,
   GEQ,
+  LEQ,
   Strength,
 } = Cassowary;
 
@@ -23,9 +24,6 @@ function getFoodVariable(foodDescriptor) {
   return {
     foodDescriptor,
     variable: ingredientAmountVariable,
-    constraints: [
-      new Inequality(new Expression(ingredientAmountVariable), GEQ, new Expression(0), Strength.required),
-    ],
     expressions: nutrientExpressions,
   };
 }
@@ -38,19 +36,51 @@ function sumExpression(foodVariables, nutrientName) {
   return expression;
 }
 
-function solve({ availableFoods, nutrientGoals }) {
+function parseIngredientConstraints(ingredientAmountVariable, constraintDescriptor) {
+  if (!constraintDescriptor) return [];
+
+  const result = [];
+  const { min, equal, max } = constraintDescriptor;
+  const ingredientAmountExpression = new Expression(ingredientAmountVariable);
+
+  if (min != null) {
+    const minConstraint = new Inequality(ingredientAmountExpression, GEQ, new Expression(min), Strength.strong);
+    result.push(minConstraint);
+  }
+  if (equal != null) {
+    const equalityConstraint = new Equation(ingredientAmountExpression, new Expression(equal), Strength.strong);
+    result.push(equalityConstraint);
+  }
+  if (max != null) {
+    const maxConstraint = new Inequality(ingredientAmountExpression, LEQ, new Expression(max), Strength.strong);
+    result.push(maxConstraint);
+  }
+
+  return result;
+}
+
+function solve({ availableFoods, nutrientGoals, ingredientConstraints = {} }) {
   const foodVariables = availableFoods.map(getFoodVariable);
 
   const solver = new SimplexSolver();
 
-  foodVariables.forEach((foodVariable) => {
-    foodVariable.constraints.forEach(constraint => solver.addConstraint(constraint));
+  foodVariables.forEach(({ variable, foodDescriptor }) => {
+    const positiveConstraint = new Inequality(new Expression(variable), GEQ, new Expression(0), Strength.required);
+
+    const constraintDescriptor = ingredientConstraints[foodDescriptor.name];
+    const globalIngredientConstraints = parseIngredientConstraints(variable, constraintDescriptor);
+
+    [positiveConstraint].concat(globalIngredientConstraints)
+      .forEach((constraint) => {
+        solver.addConstraint(constraint);
+      });
   });
 
   Object.keys(nutrientGoals).forEach((nutrientName) => {
     const nutrientTargetSum = nutrientGoals[nutrientName];
     const nutrientSumExpression = sumExpression(foodVariables, nutrientName);
     const nutrientSumEquation = new Equation(nutrientSumExpression, nutrientTargetSum, Strength.strong);
+
     solver.addConstraint(nutrientSumEquation);
   });
 
